@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('github validation'){
           steps{
-                 git url: 'https://github.com/akshu20791/addressbook-cicd-project'
+                 git url: 'https://github.com/kavyasri017/addressbook-cicd-project'
           }
         }
         stage('compiling the code'){
@@ -30,6 +30,22 @@ pipeline{
             steps{
                 sh "sudo mv /var/lib/jenkins/workspace/pipeline/target/addressbook.war /home/ubuntu/apache-tomcat-8.5.100/webapps/"
             }
+        }
+    }
+post {
+        success {
+            emailext(
+                subject: 'SUCCESS: Job \'${JOB_NAME} [${BUILD_NUMBER}]\'',
+                body: "Good news!\n\nThe Jenkins job '${JOB_NAME} [${BUILD_NUMBER}]' was successful.\nCheck it here: ${BUILD_URL}",
+                to: 'pandakavya984@gmail.com'
+            )
+        }
+        failure {
+            emailext(
+                subject: 'FAILURE: Job \'${JOB_NAME} [${BUILD_NUMBER}]\'',
+                body: "Oops!\n\nThe Jenkins job '${JOB_NAME} [${BUILD_NUMBER}]' has failed.\nCheck it here: ${BUILD_URL}",
+                to: 'pandakavya984@gmail.com'
+            )
         }
     }
 }
